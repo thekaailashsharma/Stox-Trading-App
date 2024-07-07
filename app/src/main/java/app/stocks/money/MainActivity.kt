@@ -11,8 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import app.stocks.money.ui.theme.StoxTheme
+import app.stocks.presentation.HomeScreen
+import app.stocks.presentation.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,10 +25,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             StoxTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    val viewModel: HomeViewModel = hiltViewModel()
+                   HomeScreen(viewModel = viewModel, modifier = Modifier.padding(innerPadding))
                 }
             }
         }

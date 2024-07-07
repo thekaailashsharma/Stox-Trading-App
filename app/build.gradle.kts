@@ -4,6 +4,8 @@ import java.util.Properties
 plugins {
     id(Plugins.application)
     id(Plugins.`kotlin-android`)
+    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -38,11 +40,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -56,14 +58,14 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
 
-    // Core and Kotlin
-    implementCompose()
-    implementCore()
-    implementMaterial()
+    // Default
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
@@ -71,5 +73,32 @@ dependencies {
 
     // Navigation
     implementNavigation()
+
+    // Core
+    implementCore()
+
+    // Compose
+    implementCompose()
+
+    // Material
+    implementMaterial()
+
+    // implement Core
+    implementCore()
+
+    // Dagger Hilt
+    implementDaggerHilt()
+
+    // DI Module
+    implementation(project(":di"))
+
+    // Utils Module
+    implementation(project(":utils"))
+
+    // Remote Module
+    implementation(project(":data:remote"))
+
+    // Presentation
+    implementation(project(":presentation"))
 
 }

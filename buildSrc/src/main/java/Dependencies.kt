@@ -5,6 +5,9 @@ object Versions {
     const val `activity-compose` = "1.9.0"
     const val `compose-bom` = "2024.06.00"
 
+    // Material3
+    const val material3 = "1.1.1"
+
     // Material Extended Icons
     const val `material3-icons-extended` = "1.6.8"
 
@@ -60,7 +63,7 @@ object Dependencies {
     object Material {
         const val `material3-icons-extended` =
             "androidx.compose.material:material-icons-extended:${Versions.`material3-icons-extended`}"
-        const val material3 = "androidx.compose.material3:material3"
+        const val material3 = "androidx.compose.material3:material3:${Versions.material3}"
     }
     // Navigation
     object Navigation {
@@ -92,7 +95,7 @@ object Dependencies {
         const val `ktor-serialization-kotlinx-json` =
             "io.ktor:ktor-serialization-kotlinx-json:${Versions.`ktor-client`}"
         const val `ktor-client-logging-jvm` =
-            "io.ktor:ktor-client-logging-jvm::${Versions.`ktor-client`}"
+            "io.ktor:ktor-client-logging-jvm:${Versions.`ktor-client`}"
         const val `ktor-client-gson` = "io.ktor:ktor-client-gson:${Versions.`ktor-client`}"
         const val `logback-classic` = "ch.qos.logback:logback-classic:${Versions.`logback-classic`}"
     }
@@ -132,6 +135,7 @@ object Dependencies {
         const val `compose-ui` = "androidx.compose.ui:ui"
         const val `compose-ui-graphics` = "androidx.compose.ui:ui-graphics"
         const val `compose-ui-tooling-preview` = "androidx.compose.ui:ui-tooling-preview"
+        const val `activity-compose` = "androidx.activity:activity-compose"
     }
 
 

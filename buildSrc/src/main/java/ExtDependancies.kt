@@ -1,4 +1,5 @@
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.project
 
 class DepsBuilder {
     internal val list = ArrayList<String>()
@@ -78,6 +79,7 @@ fun DependencyHandlerScope.implementCore() {
 fun DependencyHandlerScope.implementMaterial() {
     implementation {
         +Dependencies.Material.`material3-icons-extended`
+        +Dependencies.Material.material3
     }
 }
 
@@ -159,11 +161,24 @@ fun DependencyHandlerScope.implementCompose() {
         +Dependencies.Compose.`compose-ui`
         +Dependencies.Compose.`compose-ui-graphics`
         +Dependencies.Compose.`compose-ui-tooling-preview`
+        +Dependencies.Compose.`activity-compose`
     }
 }
 
 fun DependencyHandlerScope.implementCollapsingToolbar() {
     implementation {
         +Dependencies.CollapsingToolbar.`collapsing-toolbar`
+    }
+}
+
+fun DependencyHandlerScope.addUtilsModule() {
+    implementation {
+        project(":utils")
+    }
+}
+
+fun DependencyHandlerScope.addDIModule() {
+    implementation {
+        project(":di")
     }
 }

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlinx-serialization")
 }
 
 android {
@@ -43,6 +44,9 @@ dependencies {
 
     //Ktor Client
     implementKtorClient()
+
+    // Utilities Module
+    implementation(project(":utils"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
