@@ -34,7 +34,7 @@ fun HomeScreen(
                 is Resource.Success -> {
                     resource.data?.let { companyOverview ->
                         Text(
-                            text = companyOverview.symbol ?: "Hello, World!",
+                            text = companyOverview.toString() ?: "Hello, World!",
                             color = Color.White
                         )
                     }

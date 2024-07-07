@@ -1,17 +1,16 @@
 package app.stocks.data.remote
 
 import android.util.Log
-import app.stocks.data.remote.dto.intraday.IntradayResponse
-import app.stocks.data.remote.dto.overview.CompanyOverviewResponse
-import app.stocks.data.remote.dto.search.TickerSearchResponse
-import app.stocks.data.remote.dto.topGainers.TopPerformersResponse
+import app.stocks.data.dto.remoteDto.intraday.IntradayResponse
+import app.stocks.data.dto.remoteDto.overview.CompanyOverviewResponse
+import app.stocks.data.dto.remoteDto.search.TickerSearchResponse
+import app.stocks.data.dto.remoteDto.topGainers.TopPerformersResponse
 import app.stocks.utils.Constants
 import app.stocks.utils.Resource
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
-import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders

@@ -67,9 +67,11 @@ dependencies {
     // Utils Module
     implementation(project(":utils"))
 
-    // Remote Module
-    implementation(project(":data:remote"))
+    // Domain Module
+    implementation(project(":domain"))
 
+    // Dto Module
+    implementation(project(":data:dto"))
 
 
     testImplementation(libs.junit)

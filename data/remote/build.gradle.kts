@@ -45,6 +45,9 @@ dependencies {
     //Ktor Client
     implementKtorClient()
 
+    // Dto Module
+    implementation(project(":data:dto"))
+
     // Utilities Module
     implementation(project(":utils"))
 

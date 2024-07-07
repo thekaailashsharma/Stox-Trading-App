@@ -49,8 +49,17 @@ dependencies {
     // Ktor Client
     implementKtorClient()
 
+    // Room
+    implementRoom()
+
     // Add RemotePackage
     implementation(project(":data:remote"))
+
+    // Add LocalPackage
+    implementation(project(":data:local"))
+
+    // Add Domain Package
+    implementation(project(":domain"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
