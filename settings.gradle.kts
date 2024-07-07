@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Stox"
 include(":app")
+include(":data:remote")
