@@ -3,6 +3,7 @@ package app.stocks.data.remote
 import android.util.Log
 import app.stocks.data.remote.dto.intraday.IntradayResponse
 import app.stocks.data.remote.dto.overview.CompanyOverviewResponse
+import app.stocks.data.remote.dto.search.TickerSearchResponse
 import app.stocks.data.remote.dto.topGainers.TopPerformersResponse
 import app.stocks.utils.Constants
 import app.stocks.utils.Resource
@@ -70,6 +71,25 @@ class RemoteStocksRepositoryImpl(
              } else {
                  Resource.Error("An error occurred ${response.status.description}")
              }
+        } catch (e: Exception) {
+            Log.i("ApiException", e.message.toString())
+            return Resource.Error("An error occurred ${e.message}")
+        }
+    }
+
+    override suspend fun tickerSearch(query: String): Resource<TickerSearchResponse> {
+        try {
+            val response =  client.get {
+                url("${Constants.baseUrl}?function=SYMBOL_SEARCH&keywords=$query" +
+                        "&apikey=S2BHEWIDXTXEPTEH")
+                header(HttpHeaders.ContentType, ContentType.Application.Json)
+            }
+            println("Response: ${response}")
+            return if (response.status == HttpStatusCode.OK){
+                Resource.Success(response.body<TickerSearchResponse>())
+            } else {
+                Resource.Error("An error occurred ${response.status.description}")
+            }
         } catch (e: Exception) {
             Log.i("ApiException", e.message.toString())
             return Resource.Error("An error occurred ${e.message}")
