@@ -43,9 +43,10 @@ class RemoteStocksRepositoryImpl(
         try {
             val response = client.get {
                 url("${Constants.baseUrl}?function=TIME_SERIES_INTRADAY&symbol=$symbol" +
-                        "&interval=$interval&apikey=S2BHEWIDXTXEPTEH")
+                        "&interval=$interval&apikey=6XDZ49DJJR9F9P78")
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
             }
+            println("Response Intraday: ${response.body<IntradayResponse>()}")
             return if (response.status == HttpStatusCode.OK){
                 Resource.Success(response.body<IntradayResponse>())
             } else {

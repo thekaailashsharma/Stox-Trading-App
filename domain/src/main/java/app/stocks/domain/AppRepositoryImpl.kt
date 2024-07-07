@@ -2,6 +2,7 @@ package app.stocks.domain
 
 import app.stocks.data.dto.localDto.*
 import app.stocks.data.dto.mappers.*
+import app.stocks.data.dto.remoteDto.search.TickerSearchResponse
 import app.stocks.data.local.dao.CompanyOverviewDao
 import app.stocks.data.local.dao.IntraDayDao
 import app.stocks.data.local.dao.TopPerformersDao
@@ -99,11 +100,18 @@ class AppRepositoryImpl(
 
                     // Retrieve entities from Room database
                     val intraDayWithRelations = intraDayDao.getIntraDayWithRelations(intraDayEntity?.id?.toInt() ?: 0)
-                    intraDayWithRelations?.let {
-                        send(Resource.Success(it))
-                    } ?: run {
-                        send(Resource.Error("No data found"))
-                    }
+
+                    val getMetaDataEntity = intraDayDao.getMetaDataWithRelations(intraDayEntity?.id?.toInt() ?: 0)
+                    val getTimeSeries60WithRelations = intraDayDao.getTimeSeries60WithRelations(intraDayEntity?.id?.toInt() ?: 0)
+                    val getX20240626130000WithRelations = intraDayDao.getX20240626130000WithRelations(intraDayEntity?.id?.toInt() ?: 0)
+
+                    val intraDayEntities = IntraDayEntity(
+                        id = intraDayWithRelations?.id ?: 0,
+                        metaData = getMetaDataEntity,
+                        timeSeries60min = getTimeSeries60WithRelations,
+                        x20240626130000Entity = getX20240626130000WithRelations
+                    )
+                    send(Resource.Success(intraDayEntities))
                 } else {
                     // Emit error if fetching or mapping fails
                     send(Resource.Error("Failed to fetch intraday data"))
@@ -115,6 +123,9 @@ class AppRepositoryImpl(
         }
     }
 
+    override suspend fun tickerSearch(query: String): Resource<TickerSearchResponse> {
+        return remoteStocksRepository.tickerSearch(query)
+    }
 
 
 }

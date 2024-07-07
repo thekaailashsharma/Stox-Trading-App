@@ -15,7 +15,13 @@ data class IntraDayEntity(
         parentColumn = "id",
         entityColumn = "response_id"
     )
-    val timeSeries60min: TimeSeries60minEntity? = null
+    val timeSeries60min: TimeSeries60minEntity? = null,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "timeseries_id"
+    )
+    val x20240626130000Entity: X20240626130000Entity? = null
+
 )
 
 @Entity(tableName = "metadata")

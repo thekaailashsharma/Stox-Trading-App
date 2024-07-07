@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.stocks.data.dto.localDto.CompanyOverviewEntity
+import app.stocks.data.dto.localDto.IntraDayEntity
+import app.stocks.data.dto.localDto.TopPerformersWithRelations
 import app.stocks.domain.AppRepository
 import app.stocks.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,13 +21,19 @@ class HomeViewModel @Inject constructor(
     private val repository: AppRepository,
 ): AndroidViewModel(application) {
 
-    private val _response = MutableStateFlow<Resource<List<CompanyOverviewEntity>>?>(null)
+    private val _response = MutableStateFlow<Resource<IntraDayEntity>?>(null)
     val response = _response.asStateFlow()
+
+    private val _response1 = MutableStateFlow<Resource<TopPerformersWithRelations>?>(null)
+    val response1 = _response.asStateFlow()
 
     fun getCompanyOverview() {
         viewModelScope.launch {
-            repository.getCompanyOverview("HOFVW").collectLatest {
+            repository.getIntraDay("HOFVW").collectLatest {
                 _response.value = it
+            }
+            repository.getTopPerformers().collectLatest {
+                _response1.value = it
             }
             println("Company Overview: ${_response.value?.message}")
         }
