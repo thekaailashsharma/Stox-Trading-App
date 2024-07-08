@@ -1,6 +1,7 @@
 package app.stocks.di
 
 import android.content.Context
+import app.stocks.data.dto.remoteDto.intraday.IntraDayInfo
 import app.stocks.data.local.dao.CompanyOverviewDao
 import app.stocks.data.local.dao.IntraDayDao
 import app.stocks.data.local.dao.TopPerformersDao
@@ -9,6 +10,9 @@ import app.stocks.data.remote.RemoteStocksRepository
 import app.stocks.data.remote.RemoteStocksRepositoryImpl
 import app.stocks.domain.AppRepository
 import app.stocks.domain.AppRepositoryImpl
+import app.stocks.utils.parser.CSVParser
+import app.stocks.utils.parser.IntraDayInfoParser
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,8 +51,15 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideIntraDayInfoParser(): IntraDayInfoParser {
+        return IntraDayInfoParser()
+    }
+
+
+    @Provides
+    @Singleton
     fun provideRemoteStocksRepository(client: HttpClient): RemoteStocksRepository {
-        return RemoteStocksRepositoryImpl(client)
+        return RemoteStocksRepositoryImpl(client, IntraDayInfoParser())
     }
 
     @Provides
@@ -79,4 +90,14 @@ object AppModule {
     ): AppRepository {
         return AppRepositoryImpl(remoteStocksRepository, topPerformersDao, companyOverviewDao, intraDayDao)
     }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
+    @Binds
+    @Singleton
+    abstract fun bindIntrDdayInfoParser(
+        intradayInfoParser: IntraDayInfoParser
+    ): CSVParser<IntraDayInfo>
 }

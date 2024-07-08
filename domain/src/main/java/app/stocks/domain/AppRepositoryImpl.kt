@@ -2,6 +2,7 @@ package app.stocks.domain
 
 import app.stocks.data.dto.localDto.*
 import app.stocks.data.dto.mappers.*
+import app.stocks.data.dto.remoteDto.intraday.IntraDayInfo
 import app.stocks.data.dto.remoteDto.search.TickerSearchResponse
 import app.stocks.data.local.dao.CompanyOverviewDao
 import app.stocks.data.local.dao.IntraDayDao
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class AppRepositoryImpl(
     private val remoteStocksRepository: RemoteStocksRepository,
@@ -76,50 +78,14 @@ class AppRepositoryImpl(
         }
     }
 
-
-
-
-    override fun getIntraDay(symbol: String): Flow<Resource<IntraDayEntity>> {
-        return channelFlow {
-            send(Resource.Loading())
-
-            try {
-                // Fetch data from remote repository
-                val intraDayResponse = remoteStocksRepository.getMostActivelyTraded(symbol)
-
-                if (intraDayResponse is Resource.Success) {
-                    // Map response data to local entities
-                    val intraDayEntity = intraDayResponse.data?.toEntity()
-                    val metaDataEntity = intraDayResponse.data?.metaData?.toEntity()
-                    val timeSeries60minEntities = intraDayResponse.data?.timeSeries60min?.toEntity()
-
-                    // Insert entities into Room database
-                    intraDayEntity?.let { intraDayDao.insertIntraDayWithRelations(it) }
-                    metaDataEntity?.let { intraDayDao.insertMetaData(it) }
-                    timeSeries60minEntities?.let { intraDayDao.insertTimeSeries60min(it) }
-
-                    // Retrieve entities from Room database
-                    val intraDayWithRelations = intraDayDao.getIntraDayWithRelations(intraDayEntity?.id?.toInt() ?: 0)
-
-                    val getMetaDataEntity = intraDayDao.getMetaDataWithRelations(intraDayEntity?.id?.toInt() ?: 0)
-                    val getTimeSeries60WithRelations = intraDayDao.getTimeSeries60WithRelations(intraDayEntity?.id?.toInt() ?: 0)
-                    val getX20240626130000WithRelations = intraDayDao.getX20240626130000WithRelations(intraDayEntity?.id?.toInt() ?: 0)
-
-                    val intraDayEntities = IntraDayEntity(
-                        id = intraDayWithRelations?.id ?: 0,
-                        metaData = getMetaDataEntity,
-                        timeSeries60min = getTimeSeries60WithRelations,
-                        x20240626130000Entity = getX20240626130000WithRelations
-                    )
-                    send(Resource.Success(intraDayEntities))
-                } else {
-                    // Emit error if fetching or mapping fails
-                    send(Resource.Error("Failed to fetch intraday data"))
-                }
-            } catch (e: Exception) {
-                // Catch any exceptions and emit error
-                send(Resource.Error("An error occurred: ${e.message}"))
-            }
+    override suspend fun getIntraDayInfo(symbol: String): Resource<List<IntraDayInfo>> {
+        val response = remoteStocksRepository.getIntraDayInfo(symbol)
+        return if (response is Resource.Success) {
+            val intraDayEntities = response.data?.map { it.toIntradayInfoDto() }
+            intraDayEntities?.forEach { intraDayDao.insertIntraday(it) }
+            return Resource.Success(intraDayEntities?.map { it.toIntradayInfo() })
+        } else {
+            Resource.Error("An error occurred")
         }
     }
 

@@ -52,14 +52,20 @@ dependencies {
     // Room
     implementRoom()
 
-    // Add RemotePackage
+    // Add Remote Module
     implementation(project(":data:remote"))
 
-    // Add LocalPackage
+    // Add Local Module
     implementation(project(":data:local"))
 
-    // Add Domain Package
+    // Add Domain Module
     implementation(project(":domain"))
+
+    // Add Dto Module
+    implementation(project(":data:dto"))
+
+    // Add Utils Module
+    implementation(project(":utils"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

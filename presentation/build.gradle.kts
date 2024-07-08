@@ -61,6 +61,9 @@ dependencies {
     // Dagger Hilt
     implementDaggerHilt()
 
+    // Vico
+    implementation("com.patrykandpatrick.vico:compose-m3:1.13.1")
+
     // DI Module
     implementation(project(":di"))
 
@@ -77,4 +80,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(kotlin("reflect"))
 }
